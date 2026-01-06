@@ -126,11 +126,18 @@ func Verify(pub ssh.PublicKey, message, signature []byte, namespace string) erro
 	if err := ssh.Unmarshal(sig.Signature, &sshSig); err != nil {
 		return err
 	}
+	embedded, err := ssh.ParsePublicKey(sig.PublicKey)
+	if err != nil {
+		return err
+	}
 
 	data, err := createSignBlob(message, namespace)
 	if err != nil {
 		return err
 	}
 
+	if err := embedded.Verify(data, &sshSig); err != nil {
+		return err
+	}
 	return pub.Verify(data, &sshSig)
 }
