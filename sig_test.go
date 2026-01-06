@@ -1,4 +1,4 @@
-package ssh
+package sshsig
 
 import (
 	"crypto/rand"
